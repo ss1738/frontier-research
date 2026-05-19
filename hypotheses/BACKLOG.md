@@ -113,6 +113,22 @@ Ranked by: (speed to answer × novelty × field impact if true)
 
 ---
 
+---
+
+## FR-092–100 — Protein Biology, Audio/Speech, Reinforcement Learning
+
+| FR-092 | Protein Bio | IDR amino acid composition (no sequence order) predicts LLPS propensity as well as sequence-CNN—permutation-invariant composition is the load-bearing signal | PhaSepDB v2 + ProteinGym IDR variants ~8K | 2M MLP (composition) vs 8M 1D-CNN (sequence) | Composition MLP AUROC ≥0.85 AND gap vs sequence-CNN ≤0.03 AUROC |
+| FR-093 | Protein Bio | Evolutionary rate covariation (rate4site) predicts allosteric communication pathways better than structural contact maps—GNN on covariation graph outperforms contact GNN by ≥0.05 AUROC on AlloSigMA | AlloSigMA 128 proteins + ASD allosteric pairs; rate4site MSAs from UniRef50 | 15M GNN (rate4site) vs 15M GNN (contact-map) | Rate-covariation GNN AUROC ≥0.75 AND beats contact-map GNN by ≥0.05 AUROC on held-out 20% AlloSigMA proteins |
+| FR-094 | Protein Bio | Thermostability top-decile DMS variants are driven by long-range electrostatic contacts (seq sep >20), not hydrophobic burial—sparse attention confirms with ≥1.8× weight ratio across ≥8/15 assays | ProteinGym Tm DMS subset ~15 assays 200K variants + PDB/RCSB contacts | 25M sparse transformer (contact-type-conditioned heads per contact class) | Long-range electrostatic attention ≥1.8× hydrophobic attention on top-decile variants in ≥8/15 DMS assays |
+| FR-095 | Audio/Speech | Audio deepfake detectors are room-acoustic-classifiers in disguise—swapping room impulse responses (RIR) between real and fake samples collapses AUC from >0.99 to <0.75 on ASVspoof 2019 LA | ASVspoof 2019 LA (public) + OpenAIR RIR library; blind RIR extraction 10M CNN | AASIST 85K + RawGNet 2.5M (public checkpoints); RIR extraction CNN | AUC on RIR-swapped pairs <0.75 (from >0.99 baseline); genuine+fake-RIR classified as fake >70% |
+| FR-096 | Audio/Speech | Prosody encoding in HuBERT is causally driven by phoneme duration, not F0—flat-F0 duration-matched utterances degrade prosody probe accuracy by <3pp versus natural-F0 utterances | LibriSpeech train-clean-100 + LibriTTS (duration-controlled synthesis via VITS/Matcha-TTS) | Frozen HuBERT-base 94M + linear probe 1K params | Flat-F0 utterance prosody probe accuracy within 3pp of natural-F0 (duration-matched) |
+| FR-097 | Audio | Environmental sound classifiers (ESC-50, UrbanSound8K) learn microphone sensor noise fingerprints, not scene acoustics—device-adversarial training drops accuracy from >80% to <50% on cross-device same-class pairs | FreeSound cross-device same-class recordings; ESC-50 metadata; device noise specs (Zoom H5, Tascam DR-40) | CNN-14 80M + gradient-reversal device-ID adversarial head 500K | >30pp accuracy drop under device adversarial training on cross-device same-class pairs |
+| FR-098 | RL | Reward hacking in offline RL is value function Lipschitz collapse near OOD states, not policy overoptimization—gradient-norm-regularized IQL (λ=0.01) improves normalized score ≥5 points on D4RL | D4RL hopper-medium-replay-v2 + halfcheetah-medium-replay-v2; OOD states sampled by ε=0.1 perturbation | IQL 3-layer MLP 500K; Lipschitz regularization via spectral norm of Jacobian penalty | Regularized IQL improves normalized score ≥5 points vs vanilla IQL on both D4RL envs |
+| FR-099 | RL | BC compounding errors are caused by state aliasing in the learned representation, not covariate shift—NAD-error Pearson r >0.7 AND beats MMD-error correlation in MiniGrid across 100 rollouts | MiniGrid-FourRooms + DoorKey-8x8; observation window sizes {1×1, 3×3, 5×5}; A* expert trajectories | 2M CNN encoder + MLP policy; NAD (neighborhood action disagreement, k=5 nearest neighbors) | r(NAD, compounding error rate) >0.7 AND > r(MMD, error rate) across 100 rollouts per window-size condition |
+| FR-100 | RL | Intrinsic motivation bonus failure is value function rank collapse (not reward scale mismatch)—nuclear-norm-regularized RND recovers >15% generalization gap; rank drops below 10% of baseline within 200K steps | MiniGrid-KeyCorridorS3R3 + ObstructedMaze-2Dlh; 6 seeds; rank measured via SVD at 1000 sampled states | 3M CNN+DQN; RND vs rank-regularized RND (nuclear norm penalty on V(s) matrix); 3 conditions | Value rank drops <10% baseline in RND AND rank-regularized RND recovers >15% generalization gap on held-out goals |
+
+---
+
 ## Status legend
 - DEFINING — hypothesis being written
 - KILL-SWITCH — cheap falsification test running
