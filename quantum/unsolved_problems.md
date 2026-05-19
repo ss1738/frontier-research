@@ -1,0 +1,38 @@
+# Quantum Computing — Frontier Unsolved Problems
+
+## TOP 3 GAPS
+
+### 1. Microwave-to-Optical Transduction — The Pump-Heating Wall
+- Best electro-optic efficiency on real superconducting qubit integration: 8×10⁻⁴ total quantum efficiency — 3 orders of magnitude below η > 0.5 threshold required for nonzero quantum channel capacity
+- Piezo-optomechanical systems: η ≈ 3.3×10⁻³ to 9×10⁻³ with 0.57–2×10³ added noise photons — thermal noise that completely destroys quantum coherence
+- Electro-optic (LiNbO₃) best result: η = 1.18×10⁻² with Nadd < 0.12 photons — the only approach approaching quantum-limited operation, but only at weak optical pump power
+- Magneto-optic (YIG): η ≈ 10⁻⁸ to 10⁻¹⁰ — theoretically elegant, practically irrelevant today
+- Root cause of the wall: optical pump photons absorbed by the superconductor generate quasiparticles → shift microwave cavity frequencies → broaden linewidths. Increasing pump power to boost cooperativity (and efficiency) simultaneously heats the substrate and kills qubit coherence — a hard conflict with no current resolution
+- For optomechanical systems: intermediate mechanical mode has thermal occupation n_th ≫ 1 even at mK temperatures for MHz-frequency resonators; GHz mechanical frequencies (needed for n_th < 0.1) lose electromechanical coupling by orders of magnitude
+- **Specific gap**: No system can simultaneously satisfy η > 0.5, Nadd < 0.1, and practical bandwidth (>1 MHz) without optical pump power inducing quasiparticle poisoning. The pump-heating–efficiency trade-off has no known analytic resolution. The fundamental quantum channel capacity prerequisite has NEVER been achieved in any physical platform as of 2025
+- **Research unlock**: Modular quantum computing — linking separate superconducting QPUs via telecom fiber. Google, IBM, and AWS all have modular roadmaps blocked entirely on this single missing component
+
+### 2. Two-Level System (TLS) Decoherence — The Josephson Junction Lead Problem
+- TLS at amorphous interfaces (metal-oxide, substrate-metal, metal-air) are the dominant T1 limit in all current superconducting qubits. Best-in-class transmons plateau at T1 ≈ 300–500 µs; TLS are the ceiling
+- November 2025 mapping (arXiv:2511.05365): TLS are NOT uniformly distributed. Majority of detectable surface TLS reside on the Josephson junction leads — <1% of total chip area — not on the large coplanar capacitor. TLS density "significantly enhanced near shadow-evaporated electrodes fabricated by lift-off"
+- High-throughput study of >6,000 Al/AlOx/Al junctions (arXiv:2602.11469): Al electrode grain size strongly correlates with TLS density. Changing electrode thickness achieved two-thirds reduction in TLS density — largest controllable handle identified to date, but substantial residual population with unknown origin remains
+- March 2025 many-body TLS (arXiv:2503.08767): single TLS at oxide-superconductor interface creates localized Josephson current amplification ~40× in Al/Ta and ~300× in Nb over 10 nm × 10 nm region. For Nb junctions: a single TLS can reduce T1 by up to 90% in small junctions
+- Many-body effects of TLS ensembles (multiple interacting TLS, spectral diffusion, TLS–TLS coupling) are analytically unstudied — all models treat single TLS against qubit background
+- **Specific gap**: The atomic identity of the dominant TLS species in Al/AlOx/Al junctions is still unknown. Candidates: hydroxyl (OH) groups, dangling bonds, atomic two-level tunneling in amorphous AlOx. No experiment has chemically resolved which defect class dominates T1 loss — targeted surface passivation is impossible without this
+- **Research unlock**: Breaking the T1 ~ 1 ms ceiling that gates fault-tolerant operation threshold. Targeted junction fabrication chemistry that eliminates the specific defect species responsible for >50% of T1 loss
+
+### 3. QAOA/VQA Advantage — The Provable Gap That Doesn't Exist
+- As of 2025: zero quantum algorithms have demonstrated provable, reproducible practical advantage over best classical heuristics on any NP-hard optimization problem that is industrially relevant (MaxCut, TSP, portfolio optimization, scheduling)
+- April 2025 fault-tolerant analysis (arXiv:2504.01897): QAOA depth p = 623 with amplitude amplification achieves runtime crossover with classical heuristics at 179-variable 8-SAT. Requires: 73.91 million physical qubits, code distance 28, physical error rate 10⁻³, 14.99 hours runtime. Current largest systems: ~1,000–2,000 logical-equivalent qubits
+- Even optimistic reductions: crossover requires 8.88 million physical qubits at 2.94 hours
+- Shallow QAOA circuits (p ≤ 3) are efficiently classically simulable via Pauli path methods. The classical simulation boundary for QAOA is not known
+- VQA training is NP-hard in general (arXiv:2503.23723); variational training is undecidable even in noiseless settings — the optimization landscape problem is fundamental, not a hardware noise artifact
+- Barren plateaus: gradient magnitudes decay exponentially in system size for random ansätze. No efficient ansatz known that simultaneously avoids barren plateaus, is expressible, and matches problem structure for general combinatorial problems
+- **Specific gap**: No proof exists that any QAOA depth p achieves a superpolynomial speedup over any classical algorithm on any NP-hard problem. The 2025 crossover result applies only to random 8-SAT near satisfiability threshold — not to structured industry-relevant instances — and the speedup is polynomial (quartic), not exponential
+- **Research unlock**: A provable polynomial speedup on industrially-relevant instances (even at large physical qubit count) would create a concrete hardware roadmap target. Currently, there is no such target — every QAOA-based roadmap is building toward an unproven computational hypothesis
+
+## WILD HYPOTHESIS
+**Device-Personalized QEC Decoders via Syndrome Fingerprinting**: AlphaQubit (Nature 2024) demonstrated a transformer trained on real Sycamore syndrome data — and finetuned with thousands of device-specific samples — makes 6% fewer errors than tensor-network decoders and 30% fewer than correlated MWPM. But the decoder is static — finetuned once and deployed without adapting as device noise evolves intra-run. The experiment nobody has run: a continually self-updating decoder that treats QEC syndrome histories as a real-time Bayesian signal about which physical qubits are currently TLS-coupled, quasiparticle-poisoned, or frequency-shifted, and re-weights its decoding graph on the fly with a latency budget of <1 µs per syndrome round. The hypothesis: the ~10⁻² logical error rate plateau current decoders hit is not a code-distance limit but a decoder-stationarity limit — the decoder assumes a fixed error model while the underlying physical noise drifts by 10–30% intra-run due to TLS spectral diffusion alone. A decoder with explicit temporal state (LSTM or Kalman filter over inferred noise parameters) trained on paired (syndrome-sequence, noise-characterization) data should show logical error rate improvements that scale with code distance in a way static decoders cannot — because the residual error floor for static decoders is set by noise-model mismatch, not physical error rates.
+
+---
+Sources: arXiv:2509.26349 (microwave-to-optical transduction review 2025), arXiv:2412.12907 (antiferromagnet transduction), PMC/Nanophotonics 2025 (photonic links for quantum processors), arXiv:2511.05365 (TLS positions on transmons), arXiv:2503.08767 (many-body TLS effects), arXiv:2602.11469 (structural control TLS density), arXiv:2504.01897 (fault-tolerant QAOA threshold analysis), arXiv:2503.23723 (VQA undecidability), Nature 2024 (AlphaQubit), arXiv:2502.21044 (noise-aware decoding)
